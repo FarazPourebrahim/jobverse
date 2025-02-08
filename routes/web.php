@@ -6,4 +6,4 @@ use App\Http\Controllers\JobController;
 
 Route::get('/', [HomeController::class, 'index']);
 
-Route::get('jobs', [JobController::class,"index"]);
+Route::resource('jobs', JobController::class);
