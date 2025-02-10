@@ -54,6 +54,11 @@ class JobController extends Controller
         //TEMP
         $validatedData['user_id'] = 1;
 
+        if ($request->hasFile('company_logo')) {
+            $path = $request->file('company_logo')->store('logos', 'public');
+            $validatedData['company_logo'] = $path;
+        }
+
         Job::create($validatedData);
 
         return redirect()->route('jobs.index')->with('success', 'Job created successfully!');
