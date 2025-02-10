@@ -1,6 +1,9 @@
 <x-layout>
-    <h2>Jobs list:</h2>
-    @foreach($jobs as $job)
-        <a href={{route('jobs.show', $job->id)}}>{{$job->title}}</a></br>
-    @endforeach
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        @forelse($jobs as $job)
+            <x-job-card :job="$job"/>
+        @empty
+            <p>No jobs available</p>
+        @endforelse
+    </div>
 </x-layout>
