@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -13,6 +14,7 @@ class JobController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use AuthorizesRequests;
     public function index(): View
     {
         $jobs = Job::all();
@@ -53,8 +55,7 @@ class JobController extends Controller
             'company_website' => 'nullable|url',
         ]);
 
-        //TEMP
-        $validatedData['user_id'] = 1;
+        $validatedData['user_id'] = auth()->user()->id;
 
         if ($request->hasFile('company_logo')) {
             $path = $request->file('company_logo')->store('logos', 'public');
@@ -80,6 +81,8 @@ class JobController extends Controller
      */
     public function edit(Job $job): View
     {
+        $this->authorize('update', $job);
+
         return view('job.edit', compact('job'));
     }
 
@@ -88,6 +91,8 @@ class JobController extends Controller
      */
     public function update(Request $request, Job $job): RedirectResponse
     {
+        $this->authorize('update', $job);
+
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -128,6 +133,8 @@ class JobController extends Controller
      */
     public function destroy(Job $job): RedirectResponse
     {
+        $this->authorize('delete', $job);
+
         if ($job->company_logo) {
             Storage::delete('public/logos/' . $job->company_logo);
         }
