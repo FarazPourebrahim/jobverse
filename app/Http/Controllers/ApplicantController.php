@@ -41,6 +41,11 @@ class ApplicantController extends Controller
     public function destroy(Request $request, Applicant $applicant): RedirectResponse
     {
         if ($applicant->user->id === auth()->id()) {
+
+            if ($applicant->resume) {
+                Storage::delete('public/resumes/' . $applicant->resume);
+            }
+
             $applicant->delete();
             return redirect()->route('dashboard')->with('success', 'Applicant has been deleted successfully!');
         }
