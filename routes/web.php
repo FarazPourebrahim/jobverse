@@ -12,6 +12,7 @@ use App\Http\Controllers\ApplicantController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::get('/jobs/search', [JobController::class, 'search'])->name('jobs.search');
 Route::resource('jobs', JobController::class);
 
 Route::middleware('auth')->group(function () {
