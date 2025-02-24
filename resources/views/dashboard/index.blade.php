@@ -26,9 +26,9 @@
         @forelse($jobs as $job)
             <div class="flex justify-between items-center border-b-2 border-gray-200 py-2 my-4">
                 <div>
-                    <h3 class="text-xl font-semibold">
+                    <a href="jobs/{{$job->id}}" class="text-xl font-semibold">
                         {{$job->title}}
-                    </h3>
+                    </a>
                     <p class="text-gray-700">
                         {{$job->job_type}}
                     </p>

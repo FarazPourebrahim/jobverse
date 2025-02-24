@@ -9,6 +9,7 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ApplicantController;
+use App\Http\Controllers\ApplicationController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -24,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/bookmarks{job}', [BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
     Route::post('/jobs/{job}/apply', [ApplicantController::class, 'store'])->name('applicant.store');
     Route::delete('/applicants/{applicant}', [ApplicantController::class, 'destroy'])->name('applicant.destroy');
+    Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
