@@ -83,10 +83,6 @@
                 @endif
 
                 @auth
-                <p class="my-5">
-                    Put "Job Application" as the subject of your email
-                    and attach your resume.
-                </p>
                     <div x-data="{ open: false }">
                         <button @click="open = true"
                             class="block w-full text-center px-5 py-2.5 shadow-sm rounded border text-base font-medium cursor-pointer text-indigo-700 bg-indigo-100 hover:bg-indigo-200"
@@ -181,3 +177,43 @@
 
     </div>
 </x-layout>
+
+<link
+    href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css"
+    rel="stylesheet"
+/>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        mapboxgl.accessToken = "{{ env('MAPBOX_API_KEY') }}";
+
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-74.5, 40],
+            zoom: 9,
+        });
+
+        const city = '{{ $job->city }}';
+        const state = '{{ $job->state }}';
+        const address = city + ', ' + state;
+
+        fetch(`/geocode?address=${encodeURIComponent(address)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.features.length > 0) {
+                    const [longitude, latitude] = data.features[0].center;
+
+                    map.setCenter([longitude, latitude]);
+                    map.setZoom(14);
+
+                    new mapboxgl.Marker()
+                        .setLngLat([longitude, latitude])
+                        .addTo(map);
+                } else {
+                    console.error('No results found for the address.');
+                }
+            })
+            .catch(error => console.error('Error geocoding address:', error));
+    });
+</script>
